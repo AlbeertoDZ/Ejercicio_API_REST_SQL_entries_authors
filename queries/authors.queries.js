@@ -1,6 +1,3 @@
-const { insertEntry } = require("../models/authors.model");
-const { updateEntry, deleteEntry } = require("./entries.queries");
-
 const queries = {
     getAllAuthors: `SELECT * FROM authors;`,
 
@@ -25,7 +22,7 @@ const queries = {
         email=$5;
     `,
 
-    deleteEntry: `DELETE FROM public.authors
+    deleteAuthors: `DELETE FROM public.authors
     WHERE email=$1`
 }
 

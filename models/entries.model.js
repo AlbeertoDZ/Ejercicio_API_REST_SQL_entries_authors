@@ -1,22 +1,22 @@
 const { Pool } = require('pg');
 const queries = require('../queries/entries.queries'); // Queries SQL
 
-// const pool = new Pool({
-//     host: 'localhost',
-//     user: 'postgres',
-//     port: '5432',
-//     database: 'postgres',
-//     password: '123456'
-// });
-
 const pool = new Pool({
-  user: 'albertodz30',
-  host: 'dpg-d01bm4be5dus73e3l350-a.oregon-postgres.render.com',
-  database: 'bbdd_api_sql_entries',
-  password: 'jSW2JdIHRGAEReHlD1gr82zlEElNXUeL',
-  port: 5432,
-  ssl: true, 
+    host: 'localhost',
+    user: 'postgres',
+    port: '5432',
+    database: 'postgres',
+    password: '123456'
 });
+
+// const pool = new Pool({
+//   user: 'albertodz30',
+//   host: 'dpg-d01bm4be5dus73e3l350-a.oregon-postgres.render.com',
+//   database: 'bbdd_api_sql_entries',
+//   password: 'jSW2JdIHRGAEReHlD1gr82zlEElNXUeL',
+//   port: 5432,
+//   ssl: true, 
+// });
 
 // 1er GET entries
 
