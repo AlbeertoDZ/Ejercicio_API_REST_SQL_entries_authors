@@ -1,30 +1,13 @@
-const { Pool } = require('pg');
 const queries = require('../queries/entries.queries'); // Queries SQL
-
-const pool = new Pool({
-    host: 'localhost',
-    user: 'postgres',
-    port: '5432',
-    database: 'postgres',
-    password: '123456'
-});
-
-// const pool = new Pool({
-//   user: 'albertodz30',
-//   host: 'dpg-d01bm4be5dus73e3l350-a.oregon-postgres.render.com',
-//   database: 'bbdd_api_sql_entries',
-//   password: 'jSW2JdIHRGAEReHlD1gr82zlEElNXUeL',
-//   port: 5432,
-//   ssl: true, 
-// });
+const pool = require('../config/db_pgsql'); // Configuracion de la BBDD
 
 // 1er GET entries
 
-const getEntriesByID = async () => {
+const getAllEntries = async () => {
     let client, result;
     try {
         client = await pool.connect(); // Espera a abrir conexion
-        const data = await client.query(queries.getEntriesByID)
+        const data = await client.query(queries.getAllEntries)
         result = data.rows
     } catch (err) {
         console.log(err);
@@ -49,7 +32,7 @@ const updateEntry = async (entry) => {
             category,
             old_title
         ]);
-        result = data.rows
+        result = data.rowCount
     } catch (err) {
         console.log(err);
         throw err;
@@ -61,32 +44,31 @@ const updateEntry = async (entry) => {
 
 // DELETE
 
-const deleteEntry = async (title) => {
-
-    let client;
+const deleteEntry = async (title) => { // Intentar que funcione el return comentado
+    let client , result;
     try {
         client = await pool.connect(); // Espera a abrir conexion
         const data = await client.query(queries.deleteEntry, [title]);
-
+        result = data.rowCount
+        /*
         return {
             //data: data,
             rowCount: data.rowCount,
             message: data.rowCount > 0
                 ? `Se borró ${data.rowCount} entrada`
                 : 'No se encontró el registro a borrar'
-        };
+        };*/
     } catch (err) {
         console.error(err);
-        return {
-            error: err.message
-        };
+        throw err;
     } finally {
         client.release();
     }
+    return result;
 }
 
 const entries = {
-    getEntriesByID,
+    getAllEntries,
     updateEntry,
     deleteEntry
 }
@@ -103,18 +85,20 @@ const updatedEntry = {
     old_title: "Se acabaron los pepitos del Martina 2. La venganza de Jonha."
 }
 
+//1er Get
+getAllEntries()
+    .then(data => console.log(data))
+/*
 //1er PUT
 updateEntry(updatedEntry)
     .then(data => console.log(data))
 
-//1er Get
-getEntriesByID()
-    .then(data => console.log(data))
+
 
 //1er Delete
 deleteEntry()
     .then(data => console.log(data))
-
+*/
 
 module.exports = entries;
 

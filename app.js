@@ -8,7 +8,7 @@ const authorsRoutes = require("./routes/authors.routes")
 
 app.use(express.json()); // Habilito recepción de JSON en servidor
 
-//API rutas a ejecutar
+//API rutas a ejecutar --------------
 app.use('/api/entries',entriesRoutes);
 app.use('/api/authors',authorsRoutes);
 

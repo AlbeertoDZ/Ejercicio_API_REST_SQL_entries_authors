@@ -1,10 +1,9 @@
-
 const queries = {
-    getEntriesByID: `
-    SELECT title, content, date, category, name, surname, image 
-    FROM public.entries
-    INNER JOIN authors
-    ON authors.id_author = entries.id_author;`,
+    getAllEntries: `
+    SELECT e.title, e.content, e.date, e.category, a.name, a.surname, a.email, a.image
+    FROM public.entries AS e
+    INNER JOIN authors AS a
+    ON a.id_author = e.id_author;`,
     
     
     updateEntry: `UPDATE entries
@@ -18,7 +17,9 @@ const queries = {
         title=$6;`,
 
     //DELETE
-    deleteEntry: `DELETE FROM entries
+    deleteEntry: `
+    DELETE 
+    FROM entries
     WHERE title=$1`
 }
 module.exports = queries;

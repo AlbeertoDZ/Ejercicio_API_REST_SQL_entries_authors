@@ -1,12 +1,12 @@
 const queries = {
     getAllAuthors: `SELECT * FROM authors;`,
 
-    getAuthorsByEmail: `
-    SELECT name, surname, email, image
+    getAuthorByEmail: `
+    SELECT *
     FROM public.authors
     WHERE email=$1`,
 
-    insertEntry: `
+    createAuthor: `
     INSERT INTO public.authors (name, surname, email, image)
     VALUES
     ($1,$2,$3,$4)`,
@@ -22,7 +22,7 @@ const queries = {
         email=$5;
     `,
 
-    deleteAuthors: `DELETE FROM public.authors
+    deleteAuthor: `DELETE FROM public.authors
     WHERE email=$1`
 }
 

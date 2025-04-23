@@ -1,10 +1,10 @@
-const entry = require("../config/db_pgsql"); // Importar el modelo de la BBDD
+const author = require("../models/authors.model"); // Importar el modelo de la BBDD
 
 //GET http://localhost:3000/api/authors --> Todos los Authors
 const getAllAuthors = async (req, res) => {
     let authors;
     try {
-        authors = await entry.getAllAuthors();
+        authors = await entry.getAllAuthors(req.query);
       res.status(200).json(authors); // [] con los authors encontradas
     } catch (error) {
       res.status(500).json({ error: "Error en la BBDD" });
@@ -13,28 +13,20 @@ const getAllAuthors = async (req, res) => {
 
 
 // GET http://localhost:3000/api/authors?email=hola@gmail.com --> por email
-  const getAuthorsByEmail = async (req, res) => {
-    const alejandru = req.body; //{title}
-    if (
-      "email" in alejandru 
-    ) {
-      try {
-        const response = await entry.getAuthorsByEmail(alejandru);
-        res.status(200).json({
-            items_updated: response,
-            data: alejandru
-        });
+  const getAuthorByEmail = async (req, res) => {
+    const searchByEmail = req.query; //{title}
+       try {
+        const response = await author.getAuthorByEmail(searchByEmail);
+        res.status(200).json(response);
       } catch (error) {
         res.status(500).json({ error: "Error en la BBDD" });
       }
-    } else {
-      res.status(400).json({ error: "Faltan campos en la entrada" });
-    }
+     
   };
 
 // POST http://localhost:3000/api/authors/ 
-const insertEntry = async (req, res) => {
-    const insertEntry = req.body; // {name, surname, email, image}
+const createAuthor = async (req, res) => {
+    const newAuthor = req.body; // {name, surname, email, image}
     if (
       "name" in insertEntry &&
       "surname" in insertEntry &&
@@ -42,10 +34,11 @@ const insertEntry = async (req, res) => {
       "image" in insertEntry 
       ) {
       try {
-        const response = await entry.insertEntry(insertEntry);
+        const response = await entry.createAuthor(newAuthor);
         res.status(200).json({
-            items_updated: response,
-            data: insertEntry 
+            message: `usuario creado: ${newAuthor}`,
+            "items_created": response,
+            data: newAuthor 
         });
       } catch (error) {
         res.status(500).json({ error: "Error en la BBDD" });
@@ -56,20 +49,21 @@ const insertEntry = async (req, res) => {
   };
 
 //PUT 
-const updateAuthors = async (req, res) => {
-    const modifiedEntry = req.body; // {title,content,date,email,category,old_title}
+//Devolver {message: "usuario actualizado: guillermu@thebridgeschool.es"}
+const updateAuthor = async (req, res) => {
+    const modifiedAuthor = req.body; // {title,content,date,email,category,old_title}
     if (
-      "name" in modifiedEntry &&
-      "surname" in modifiedEntry &&
-      "email" in modifiedEntry &&
-      "image" in modifiedEntry &&
-      "old_email" in modifiedEntry
+      "name" in modifiedAuthor &&
+      "surname" in modifiedAuthor &&
+      "email" in modifiedAuthor &&
+      "image" in modifiedAuthor &&
+      "old_email" in modifiedAuthor
     ) {
       try {
-        const response = await entry.updateAuthors(modifiedEntry);
+        const response = await author.updateAuthors(modifiedAuthor);
         res.status(200).json({
-            items_updated: response,
-            data: modifiedEntry 
+            message: 'Autor actualizado',
+            "items_updated": response
         });
       } catch (error) {
         res.status(500).json({ error: "Error en la BBDD" });
@@ -80,20 +74,22 @@ const updateAuthors = async (req, res) => {
   };
 
   // DELETE authors
-const deleteEntry = async (req, res) => {
-    const email = req.params.email;
+const deleteAuthor = async (req, res) => {
+    const email = req.body; // {email}
     try {
-      const result = await entry.deleteEntry(email);
-  
-      if(result.rowCount === 0){
+      const response = await entry.deleteAuthor(email);
+      
+      if(response.rowCount === 0){
         return res.status(404).json ({
           //data: result.data,
           message: `No existe ningun registro con ese titulo`
         });
       }
+
       res.status(200).json ({
-        //data: result.data,
-        message: result.message
+        //data: response.data,
+        message: `Se ha borrado ${email}`,
+        "items_updated": response
       });
   
     } catch (error) {
@@ -103,8 +99,8 @@ const deleteEntry = async (req, res) => {
 
 module.exports = {
     getAllAuthors, // Get todos los autores
-    getAuthorsByEmail, // Get autor por email
-    insertEntry,
-    updateAuthors,
-    deleteEntry
+    getAuthorByEmail, // Get autor por email
+    createAuthor,
+    updateAuthor,
+    deleteAuthor
 };

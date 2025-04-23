@@ -3,18 +3,18 @@ const authorsController = require("../controllers/authors.controller");
 const router = express.Router();
 
 //GET http://localhost:3000/api/authors --> ALL
-router.get('/authors', authorsController.getAllAuthors);
+router.get('/', authorsController.getAllAuthors);
 
 //GET http://localhost:3000/api/authors?email=alejandru@thebridgeschool.es
-router.get('/authors/email', authorsController.getAuthorsByEmail);
+router.get('/email', authorsController.getAuthorByEmail);
 
 //POST http://localhost:3000/api/authors/ 
-router.post('/', authorsController.insertEntry);
+router.post('/', authorsController.createAuthor);
 
 //PUT http://localhost:3000/api/authors/ 
-router.put('/', authorsController.updateAuthors);
+router.put('/', authorsController.updateAuthor);
 
 //DELETE http://localhost:3000/api/authors/ 
-router.delete('/', authorsController.deleteEntry)
+router.delete('/email', authorsController.deleteAuthor)
 
 module.exports = router;

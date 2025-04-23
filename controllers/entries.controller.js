@@ -1,10 +1,10 @@
-const entry = require("../config/db_pgsql"); // Importar el modelo de la BBDD
+const entry = require("../models/entries.model"); // Importar el modelo de la BBDD
 
 //Get entries
-const getEntriesByID = async (req, res) => {
+const getAllEntries = async (req, res) => {
     let entries;
     try {
-        entries = await entry.getEntriesByID();
+        entries = await entry.getAllEntries(req.query);
       res.status(200).json(entries); // [] con las entries encontradas
     } catch (error) {
       res.status(500).json({ error: "Error en la BBDD" });
@@ -26,8 +26,8 @@ const updateEntry = async (req, res) => {
     try {
       const response = await entry.updateEntry(modifiedEntry);
       res.status(200).json({
-        message: `Se actualizó el registro '${modifiedEntry.title}'`,
-        items_updated: response,
+        message: `Se actualizó la entry '${modifiedEntry.title}'`,
+        "items_updated": response,
         data: modifiedEntry 
       });
     } catch (error) {
@@ -40,19 +40,14 @@ const updateEntry = async (req, res) => {
 
 // DELETE entries
 const deleteEntry = async (req, res) => {
-  const title = req.params.title;
+  const title = req.body.title;
   try {
-    const result = await entry.deleteEntry(title);
+    const response = await entry.deleteEntry(title);
 
-    if(result.rowCount === 0){
-      return res.status(404).json ({
-        //data: result.data,
-        message: `No existe ningun registro con ese titulo`
-      });
-    }
     res.status(200).json ({
       //data: result.data,
-      message: result.message
+      "item_deleted": response,
+      message: `Se ha borrado la entry: ${title}`,
     });
 
   } catch (error) {
@@ -61,7 +56,7 @@ const deleteEntry = async (req, res) => {
 }
 
 module.exports = {
-  getEntriesByID,
+  getAllEntries,
   deleteEntry, //--> DELETE
   updateEntry, //--> PUT
 };
