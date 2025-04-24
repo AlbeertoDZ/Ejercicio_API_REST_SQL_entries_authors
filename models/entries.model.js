@@ -85,15 +85,15 @@ const updatedEntry = {
     old_title: "Se acabaron los pepitos del Martina 2. La venganza de Jonha."
 }
 
-//1er Get
-getAllEntries()
-    .then(data => console.log(data))
+
 /*
 //1er PUT
 updateEntry(updatedEntry)
     .then(data => console.log(data))
 
-
+//1er Get
+getAllEntries()
+    .then(data => console.log(data))
 
 //1er Delete
 deleteEntry()

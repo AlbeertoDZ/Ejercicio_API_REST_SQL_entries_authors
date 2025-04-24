@@ -1,4 +1,3 @@
-const { Pool } = require('pg');
 const queries = require('../queries/authors.queries'); // Queries SQL
 const pool = require('../config/db_pgsql'); // Configuracion de la BBDD
 
@@ -18,10 +17,10 @@ const getAllAuthors = async () => {
     }
     return result
 }
-/*
+
 getAllAuthors()
     .then(data => console.log(data))
-*/
+
 // 1er GET Authors por email
 
 const getAuthorByEmail = async ({email}) => { //OBJETO PORQUE NO COGE COMO VARIABLE

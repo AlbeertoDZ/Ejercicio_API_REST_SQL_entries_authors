@@ -4,7 +4,7 @@ const author = require("../models/authors.model"); // Importar el modelo de la B
 const getAllAuthors = async (req, res) => {
     let authors;
     try {
-        authors = await entry.getAllAuthors(req.query);
+        authors = await author.getAllAuthors(req.query);
       res.status(200).json(authors); // [] con los authors encontradas
     } catch (error) {
       res.status(500).json({ error: "Error en la BBDD" });
@@ -28,15 +28,15 @@ const getAllAuthors = async (req, res) => {
 const createAuthor = async (req, res) => {
     const newAuthor = req.body; // {name, surname, email, image}
     if (
-      "name" in insertEntry &&
-      "surname" in insertEntry &&
-      "email" in insertEntry &&
-      "image" in insertEntry 
+      "name" in newAuthor &&
+      "surname" in newAuthor &&
+      "email" in newAuthor &&
+      "image" in newAuthor 
       ) {
       try {
-        const response = await entry.createAuthor(newAuthor);
+        const response = await author.createAuthor(newAuthor);
         res.status(200).json({
-            message: `usuario creado: ${newAuthor}`,
+            message: `usuario creado: ${newAuthor.name}`,
             "items_created": response,
             data: newAuthor 
         });
@@ -75,9 +75,9 @@ const updateAuthor = async (req, res) => {
 
   // DELETE authors
 const deleteAuthor = async (req, res) => {
-    const email = req.body; // {email}
+    const {email} = req.body; // {email}
     try {
-      const response = await entry.deleteAuthor(email);
+      const response = await author.deleteAuthor({email});
       
       if(response.rowCount === 0){
         return res.status(404).json ({
